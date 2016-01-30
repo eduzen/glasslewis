@@ -1,0 +1,38 @@
+{% extends 'contacts/base.html' %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-11">
+        <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+           <tr>
+             <th class="info">Avatar</th>
+             <th class="info">First name</th>
+             <th class="info">Last name</th>
+             <th class="info">Phone number</th>
+             <th class="info">Company</th>
+             <th class="info">Email</th>
+          </tr>
+          <tr>
+              <td>
+                {% if contact.avatar %}<img width="150" src="{{ contact.avatar.url }}" />
+                {% elif not contact.avatar %}<p class="text-left"> Not picture</p>
+                {% endif %}
+              </td>
+            <td><p class="text-left">{{ contact.first_name }}</p></td>
+            <td><p class="text-left">{{ contact.last_name }}</p></td>
+            <td><p class="text-left">{{ contact.phone_number }}</p></td>
+            <td><p class="text-left">{{ contact.company }}</p></td>
+            <td>
+                <a href='{% url 'contacts.views.contact_detail' pk=contact.pk %}'>
+                <p class="text-left">{{ contact.email }}</p>
+                </a></td>
+          </tr>
+        </table>
+        </div>
+    </div>
+  </div>
+  <br>
+{% endblock content %}
