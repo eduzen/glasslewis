@@ -14,8 +14,9 @@
              <th class="info">First name</th>
              <th class="info">Last name</th>
              <th class="info">Phone number</th>
-             <th class="info">Company</th>
+             <th class="info">Address</th>
              <th class="info">Email</th>
+             <th class="info">Company</th>
           </tr>
           {% for contact in contacts %}
           <tr>
@@ -26,12 +27,47 @@
               </td>
             <td><p class="text-left">{{ contact.first_name }}</p></td>
             <td><p class="text-left">{{ contact.last_name }}</p></td>
-            <td><p class="text-left">{{ contact.phone_number }}</p></td>
-            <td><p class="text-left">{{ contact.company }}</p></td>
             <td>
-                <a href='{% url 'contacts.views.contact_detail' pk=contact.pk %}'>
-                <p class="text-left">{{ contact.email }}</p>
-                </a></td>
+            {% if contact.phones %}
+              <table>
+                  {% for phone in contact.phones %}
+                  <tr>
+                    <td><p class="text-left">{{ phone.phone_number }}</p></td>
+                    <td><p class="text-left">{% if phone.main %} (Main){% endif %}</p></td>
+                  </tr>
+                  {% endfor %}
+              </table>
+            {% else %}
+              <p class="text-left"> No phone number</p>
+            {% endif %}
+            </td>
+            <td>
+            {% if contact.addresses %}
+              <table>
+                  {% for address in contact.addresses %}
+                  <tr>
+                    <td><p class="text-left">{{ address.address }}{% if address.main %} (Main){% endif %}, {{ address.city }}, {{ address.state }}</p></td>
+                  </tr>
+                  {% endfor %}
+              </table>
+            {% else %}
+              <p class="text-left"> No addresses </p>
+            {% endif %}
+            </td>
+            <td>
+            {% if contact.emails %}
+              <table>
+                  {% for email in contact.emails %}
+                  <tr>
+                    <td><p class="text-left">{{ email.email }}{% if email.main %} (Main){% endif %}</p></td>
+                  </tr>
+                  {% endfor %}
+              </table>
+            {% else %}
+              <p class="text-left"> No email</p>
+            {% endif %}
+            </td>
+            <td><p class="text-left">{{ contact.company }}</p></td>
           </tr>
           {% endfor %}
         </table>

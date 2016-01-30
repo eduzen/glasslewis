@@ -37,10 +37,10 @@
           {% for contact in company.contacts %}
           <tr>
             <td class="picture" id="{{ contact.id }}"><p class="text-left">{{ contact.first_name }} {{ contact.last_name }}</p></td>
-            <td><p class="text-left">{{ contact.phone_number }}</p></td>
+            <td><p class="text-left">{{ contact.phone.phone_number }}</p></td>
             <td>
-                <a href='{% url 'contacts.views.contact_detail' pk=contact.pk %}'>
-                <p class="text-left">{{ contact.email }}</p>
+                <a href="{% url 'contacts.views.contact_detail' pk=contact.pk %}">
+                <p class="text-left">{{ contact.email.email }}</p>
                 </a></td>
           </tr>
           {% endfor %}

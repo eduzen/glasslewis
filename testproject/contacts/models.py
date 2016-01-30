@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.core.validators import RegexValidator
 from django.core.validators import URLValidator
 
 
@@ -53,16 +52,46 @@ class Contact(models.Model):
     # Attributes
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
-    email = models.EmailField(unique=True)
     avatar = models.ImageField(
         upload_to=get_image_path,
         blank=True,
         null=True
     )
-    phone_number = models.CharField(
-        max_length=70,
-        blank=True
-    )
+
+    @property
+    def addresses(self):
+        address = Address.objects.filter(contact=self)
+        if address.exists():
+            return address
+
+    @property
+    def phone(self):
+        phone = Phone.objects.values("phone_number").filter(
+            contact=self,
+            main=True
+        )
+        if phone.exists():
+            return phone[0]
+
+    @property
+    def phones(self):
+        phones = Phone.objects.values("phone_number", "main").filter(
+            contact=self,
+        )
+        if phones.exists():
+            return phones
+
+    @property
+    def email(self):
+        email = Email.objects.values("email").filter(contact=self, main=True)
+        if email.exists():
+            return email[0]
+
+    @property
+    def emails(self):
+        email = Email.objects.values("email", "main").filter(contact=self)
+        if email.exists():
+            return email
 
     def __unicode__(self):
         return "%s - %s" % (self.first_name, self.last_name)
@@ -71,3 +100,59 @@ class Contact(models.Model):
         verbose_name = ("Contact")
         verbose_name_plural = ("Contacts")
         ordering = ("last_name", )
+
+
+class Address(models.Model):
+    # Relations
+    contact = models.ForeignKey(Contact)
+
+    # Attributes
+    address_type = models.CharField(
+        max_length=10,
+    )
+    address = models.CharField(
+        max_length=255,
+    )
+    city = models.CharField(
+        max_length=255,
+    )
+    state = models.CharField(
+        max_length=20,
+    )
+    postal_code = models.CharField(
+        max_length=20,
+    )
+    main = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = ("Address")
+        verbose_name_plural = ("Addresses")
+
+
+class Email(models.Model):
+    # Relations
+    contact = models.ForeignKey(Contact)
+
+    # Attributes
+    email = models.EmailField(unique=True)
+    main = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = ("Email")
+        verbose_name_plural = ("Emails")
+
+
+class Phone(models.Model):
+    # Relations
+    contact = models.ForeignKey(Contact)
+
+    # Attributes
+    phone_number = models.CharField(
+        max_length=70,
+        blank=True
+    )
+    main = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = ("Phone")
+        verbose_name_plural = ("Phones")
