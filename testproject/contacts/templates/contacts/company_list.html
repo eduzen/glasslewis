@@ -24,31 +24,34 @@
     </div>
     <div class="col-md-4"></div>
   </div>
-  <div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-11">
-        <div class="table-responsive">
-        <table class="table table-striped table-bordered">
-           <tr>
-             <th class="info">Name</th>
-             <th class="info">Phone number</th>
-             <th class="info">Email</th>
-          </tr>
-          {% for contact in company.contacts %}
-          <tr>
-            <td class="picture" id="{{ contact.id }}"><p class="text-left">{{ contact.first_name }} {{ contact.last_name }}</p></td>
-            <td><p class="text-left">{{ contact.phone.phone_number }}</p></td>
-            <td>
-                <a href="{% url 'contacts.views.contact_detail' pk=contact.pk %}">
-                <p class="text-left">{{ contact.email.email }}</p>
-                </a></td>
-          </tr>
-          {% endfor %}
-        </table>
-        </div>
+  {% if company.contacts %}
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-11">
+          <div class="table-responsive">
+          <table class="table table-striped table-bordered">
+             <tr>
+               <th class="info">Name</th>
+               <th class="info">Phone number</th>
+               <th class="info">Email</th>
+            </tr>
+            {% for contact in company.contacts %}
+            <tr>
+              <td class="picture" id="{{ contact.id }}"><p class="text-left">{{ contact.first_name }} {{ contact.last_name }}</p></td>
+              <td><p class="text-left">{{ contact.phone.phone_number }}</p></td>
+              <td>
+                  <a href="{% url 'contacts.views.contact_detail' pk=contact.pk %}">
+                  <p class="text-left">{{ contact.email.email }}</p>
+                  </a></td>
+            </tr>
+            {% endfor %}
+          </table>
+          </div>
+      </div>
     </div>
-  </div>
-  <br>
+    <br>
+  {% endif %}
+
 {% endfor %}
 
 
