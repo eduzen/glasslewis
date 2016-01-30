@@ -1,5 +1,10 @@
 from django.shortcuts import render
 from .models import Company, Contact
+from django.views import generic
+
+
+class About(generic.TemplateView):
+    template_name = "contacts/about.html"
 
 
 def company_list(request):

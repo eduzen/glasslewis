@@ -12,7 +12,16 @@
         <p class="text-left"><a href='{{ company.homepage }}'>{{ company.homepage }}</a></p>
         <br>
     </div>
-    <div class="col-md-4"></div>
+    <div class="col-md-4">
+     {% for contact in company.contacts %}
+        {% if contact.avatar %}
+          <div id="{{ contact.id }}" style="display: none;"><img width="100" src="{{ contact.avatar.url }}" /></div>
+        {% elif not contact.avatar %}
+          <div id="{{ contact.id }}" style="display: none;"><p class="text-left"> Not picture </p></div>
+        {% endif %}
+    {% endfor %}
+
+    </div>
     <div class="col-md-4"></div>
   </div>
   <div class="row">
@@ -27,7 +36,7 @@
           </tr>
           {% for contact in company.contacts %}
           <tr>
-            <td class="picture"><p class="text-left">{{ contact.first_name }} {{ contact.last_name }}</p></td>
+            <td class="picture" id="{{ contact.id }}"><p class="text-left">{{ contact.first_name }} {{ contact.last_name }}</p></td>
             <td><p class="text-left">{{ contact.phone_number }}</p></td>
             <td>
                 <a href='{% url 'contacts.views.contact_detail' pk=contact.pk %}'>
@@ -42,23 +51,6 @@
   <br>
 {% endfor %}
 
-<!-- Creates the bootstrap modal where the image will appear -->
-<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Image preview</h4>
-      </div>
-      <div class="modal-body">
-        <img src="" id="imagepreview" style="width: 400px; height: 264px;" >
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 {% endblock content %}
 
@@ -66,8 +58,10 @@
 <script>
   console.log('edu');
   $(".picture").hover(function() {
-      $('#imagepreview').attr('src', $('#imageresource').attr('src')); // here asign the image to the modal when the user click the enlarge link
-      $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+      console.log(this.id);
+      $("#"+ this.id).show();
+  },function(){
+    $("#"+ this.id).hide();
   });
 </script>
 {% endblock scripts %}

@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^contact$', views.contacts),
     url(r'^contacts$', views.contacts),
     url(r'^contact/(?P<pk>[0-9]+)/$', views.contact_detail),
+    url(r'^about$', views.About.as_view()),
 ]
